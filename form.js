@@ -1,32 +1,43 @@
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("addTaskBtn").addEventListener("click", addTask);
-    document.getElementById("taskInput").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            addTask();
-        }
-    });
-});
-function addTask (){
-    let taskInput = document.getElementById("taskInput");
-    let taskText = taskInput.value.trim();
-    if (taskText === "")return;
-
- let li= document.createElement("li");
- let taskSpan = document.createElement("span");
- taskSpan.textContent = taskText;
-
- taskSpan.addEventListener("click", function() {
-    taskSpan.classList.toggle("completed");
- });
-let deleteButton = document.createElement("button");
-deleteButton.textContent = "X";
-deleteButton.classList.add("delete-btn");
-deleteButton.addEventListener("click", function() {
-    li.remove();
-});
-
-li.appendChild(taskSpan);
-li.appendChild(deleteButton);
-document.getElementById("taskList").appendChild(li);
-taskInput.value = "";
+const handleSubmit = function(e){
+    e.preventDefault()
+    addTask()
+    attachComplete()
+    attachDelete()
 }
+
+   const addTask= function() {
+    let tasks= document.querySelector("#tasks")
+    let inputField = document.querySelector("#newTask input")
+    let newTask = `
+    <div class="newTask"></div>
+        <span id="taskname">
+        ${inputField.value}
+        </span>
+        <button class="delete">
+        <i class="far fa-trash-alt"></i>
+        </button>
+        </div>
+        `
+    tasks.innerHTML += newTask;
+    inputField.value = " "
+   }
+   const attachComplete = function(){
+    let allTasks = document.querySelector(".task");
+    for (let i = 0; i < allTasks.length; i++) {
+        allTasks[i].addEventListener("click", function (){
+            this.classList.toggle("completed")
+        })
+    }
+   }
+        const attachDelete= function(){
+            let allDeleteButtons= document.querySelectorAll(".delete")
+            for (let i = 0; i < allDeleteButtons.length; i++){
+                allDeleteButtons[i].addEventListener("click", function(){
+                    this.parentNode.remove()
+                })
+            }
+        }
+        window.onload = function(){
+            let form = document.querySelector("form")
+            form.addEventListener("submit", handleSubmit)
+        }
